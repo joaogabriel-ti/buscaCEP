@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta CEP</title>
+    <link rel="icon" href="images/jgtech.ico" type="image/x-icon" />    
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+        .logo {
+            width: 200px; /* Ajuste o valor conforme necessário */
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .status {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #333;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script type="text/javascript">
+        function limpa_formulário_cep() {
+            document.getElementById('rua').value = "";
+            document.getElementById('bairro').value = "";
+            document.getElementById('cidade').value = "";
+            document.getElementById('uf').value = "";
+            document.getElementById('ddd').value = "";
+            document.getElementById('ibge').value = "";
+            document.getElementById('status').textContent = "";
+        }
+
+        function meu_callback(conteudo) {
+            if (!("erro" in conteudo)) {
+                document.getElementById('rua').value = conteudo.logradouro;
+                document.getElementById('bairro').value = conteudo.bairro;
+                document.getElementById('cidade').value = conteudo.localidade;
+                document.getElementById('uf').value = conteudo.uf;
+                document.getElementById('ddd').value = conteudo.ddd;
+                document.getElementById('ibge').value = conteudo.ibge;
+                document.getElementById('status').textContent = "Consulta realizada com sucesso!";
+            } else {
+                limpa_formulário_cep();
+                document.getElementById('status').textContent = "CEP não encontrado.";
+            }
+        }
+
+        function pesquisacep(valor) {
+            var cep = valor.replace(/\D/g, ''); // Remove caracteres não numéricos
+            if (cep != "") {
+                var validacep = /^[0-9]{8}$/; // Verifica se o CEP tem 8 dígitos
+                if (validacep.test(cep)) {
+                    document.getElementById('rua').value = "...";
+                    document.getElementById('bairro').value = "...";
+                    document.getElementById('cidade').value = "...";
+                    document.getElementById('uf').value = "...";
+                    document.getElementById('ddd').value = "...";
+                    document.getElementById('ibge').value = "...";
+                    document.getElementById('status').textContent = "Consultando...";
+
+                    var script = document.createElement('script');
+                    script.src = 'https://viacep.com.br/ws/' + cep + '/json/?callback=meu_callback';
+                    document.body.appendChild(script);
+                } else {
+                    limpa_formulário_cep();
+                    document.getElementById('status').textContent = "Formato de CEP inválido.";
+                }
+            } else {
+                limpa_formulário_cep();
+            }
+        }
+
+        function consultarCep() {
+            var cep = document.getElementById('cep').value;
+            pesquisacep(cep);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <img src="images/logo.png" alt="Logo da empresa" class="logo">
+        <h1>Consulta CEP</h1>
+        <p>Digite o CEP para consultar o endereço correspondente.</p>
+        <form method="get" action="javascript:void(0);">
+            <div class="form-group">
+                <label for="cep">CEP:</label>
+                <input name="cep" type="text" id="cep" size="10" maxlength="9" />
+            </div>
+            <div class="form-group">
+                <label for="rua">Rua:</label>
+                <input name="rua" type="text" id="rua" size="40" />
+            </div>
+            <div class="form-group">
+                <label for="bairro">Bairro:</label>
+                <input name="bairro" type="text" id="bairro" size="30" />
+            </div>
+            <div class="form-group">
+                <label for="cidade">Cidade:</label>
+                <input name="cidade" type="text" id="cidade" size="30" />
+            </div>
+            <div class="form-group">
+                <label for="uf">Estado:</label>
+                <input name="uf" type="text" id="uf" size="2" />
+            </div>
+            <div class="form-group">
+                <label for="ddd">DDD:</label>
+                <input name="ddd" type="text" id="ddd" size="2" />
+            </div>
+            <div class="form-group">
+                <label for="ibge">IBGE:</label>
+                <input name="ibge" type="text" id="ibge" size="8" />
+            </div>
+            <div class="form-group">
+                <button type="button" onclick="consultarCep()">Consultar</button>
+                <button type="button" onclick="limpa_formulário_cep()">Limpar</button>
+            </div>
+        </form>
+        <div id="status" class="status"></div>
+    </div>
+</body>
+</html>
+

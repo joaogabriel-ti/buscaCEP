@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  web:
+    image: nginx:latest
+    container_name: consultaCEP
+    ports:
+      - "8000:80"
+    volumes:
+      - ./app:/usr/share/nginx/html:ro
+    networks:
+      - webnet
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'   # Limita o contêiner a 50% de um núcleo da CPU
+          memory: 512M  # Limita o contêiner a 512MB de memória
+
+networks:
+  webnet:
+    driver: bridge
+
+volumes:
+  app_data:
+
