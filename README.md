@@ -21,7 +21,7 @@ O projeto consiste em uma tela de consulta de CEP que utiliza a API do ViaCEP pa
 🐳 Docker:
 - Utilizei Nginx em um container Docker para servir o projeto. Com o Docker Compose, configuramos a imagem do Nginx, portas e volumes necessários.
 
-PS: Adicionei ao projeto um script para facilitar a instalação do Docker.
+PS: Adicionei ao projeto um script para facilitar a instalação do Docker em distros baseadas em Ubuntu.
 
 Espero que gostem do projeto! Se tiverem dúvidas ou sugestões, estou à disposição.
 
